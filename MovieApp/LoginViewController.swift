@@ -20,7 +20,7 @@ class PaddedTextField: UITextField {
     }
 }
 
-class LoginViewController: UIViewController{
+class LogInViewController: UIViewController{
     
     private let viewBackgroundColor = UIColor(red: 19/255, green: 59/255, blue: 99/255, alpha: 1)
     private let inputBackgroundColor = UIColor(red:21/255, green:77/255, blue:133/255, alpha:1)

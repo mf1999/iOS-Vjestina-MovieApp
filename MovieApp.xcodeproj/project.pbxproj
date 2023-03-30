@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6E784BB829D34EEF003B1DF8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E784BB729D34EEF003B1DF8 /* LoginViewController.swift */; };
+		6E15AF9029D5943C0053C944 /* MovieDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E15AF8F29D5943C0053C944 /* MovieDetailsViewController.swift */; };
+		6E15AF9329D59BC80053C944 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6E15AF9229D59BC80053C944 /* Kingfisher */; };
+		6E784BB829D34EEF003B1DF8 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E784BB729D34EEF003B1DF8 /* LogInViewController.swift */; };
 		6E7B6D2929D2ED58007DD0CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B6D2829D2ED58007DD0CB /* AppDelegate.swift */; };
 		6E7B6D2B29D2ED58007DD0CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B6D2A29D2ED58007DD0CB /* SceneDelegate.swift */; };
 		6E7B6D3229D2ED5A007DD0CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E7B6D3129D2ED5A007DD0CB /* Assets.xcassets */; };
@@ -17,7 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6E784BB729D34EEF003B1DF8 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		6E15AF8F29D5943C0053C944 /* MovieDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsViewController.swift; sourceTree = "<group>"; };
+		6E784BB729D34EEF003B1DF8 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		6E7B6D2529D2ED58007DD0CB /* MovieApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E7B6D2829D2ED58007DD0CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E7B6D2A29D2ED58007DD0CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -31,6 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E15AF9329D59BC80053C944 /* Kingfisher in Frameworks */,
 				6E7B6D3E29D2EE26007DD0CB /* PureLayout in Frameworks */,
 				6E7B6D4129D2EE84007DD0CB /* MovieAppData in Frameworks */,
 			);
@@ -63,7 +67,8 @@
 				6E7B6D3129D2ED5A007DD0CB /* Assets.xcassets */,
 				6E7B6D3329D2ED5A007DD0CB /* LaunchScreen.storyboard */,
 				6E7B6D3629D2ED5A007DD0CB /* Info.plist */,
-				6E784BB729D34EEF003B1DF8 /* LoginViewController.swift */,
+				6E784BB729D34EEF003B1DF8 /* LogInViewController.swift */,
+				6E15AF8F29D5943C0053C944 /* MovieDetailsViewController.swift */,
 			);
 			path = MovieApp;
 			sourceTree = "<group>";
@@ -87,6 +92,7 @@
 			packageProductDependencies = (
 				6E7B6D3D29D2EE26007DD0CB /* PureLayout */,
 				6E7B6D4029D2EE84007DD0CB /* MovieAppData */,
+				6E15AF9229D59BC80053C944 /* Kingfisher */,
 			);
 			productName = MovieApp;
 			productReference = 6E7B6D2529D2ED58007DD0CB /* MovieApp.app */;
@@ -119,6 +125,7 @@
 			packageReferences = (
 				6E7B6D3C29D2EE26007DD0CB /* XCRemoteSwiftPackageReference "PureLayout" */,
 				6E7B6D3F29D2EE84007DD0CB /* XCRemoteSwiftPackageReference "MovieAppData" */,
+				6E15AF9129D59BC80053C944 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 6E7B6D2629D2ED58007DD0CB /* Products */;
 			projectDirPath = "";
@@ -146,7 +153,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E784BB829D34EEF003B1DF8 /* LoginViewController.swift in Sources */,
+				6E15AF9029D5943C0053C944 /* MovieDetailsViewController.swift in Sources */,
+				6E784BB829D34EEF003B1DF8 /* LogInViewController.swift in Sources */,
 				6E7B6D2929D2ED58007DD0CB /* AppDelegate.swift in Sources */,
 				6E7B6D2B29D2ED58007DD0CB /* SceneDelegate.swift in Sources */,
 			);
@@ -358,6 +366,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6E15AF9129D59BC80053C944 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		6E7B6D3C29D2EE26007DD0CB /* XCRemoteSwiftPackageReference "PureLayout" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PureLayout/PureLayout.git";
@@ -377,6 +393,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6E15AF9229D59BC80053C944 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E15AF9129D59BC80053C944 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		6E7B6D3D29D2EE26007DD0CB /* PureLayout */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6E7B6D3C29D2EE26007DD0CB /* XCRemoteSwiftPackageReference "PureLayout" */;
