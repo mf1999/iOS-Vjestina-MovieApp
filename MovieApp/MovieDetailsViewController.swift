@@ -13,6 +13,9 @@ class MovieDetailsViewController: UIViewController {
     private var quickDetailsView: UIView! // Top one with the background image
     private var summaryAndCastView: UIView! // Bottom one with the cast and crew
     
+    private var scrollView: UIScrollView!
+    private var contentView: UIView!
+    
     private var movieImageView: UIImageView!
     
     private var favouriteButton: UIButton!
@@ -45,6 +48,14 @@ class MovieDetailsViewController: UIViewController {
     
     private func createViews(){
         let movieDetails = MovieUseCase().getDetails(id: 111161)
+        
+        scrollView = UIScrollView()
+        scrollView.bounces = true
+        view.addSubview(scrollView)
+        
+        contentView = UIView()
+        scrollView.addSubview(contentView)
+        
         createQuickDetailsView(for: movieDetails!)
         createSummaryAndCastView(for: movieDetails!)
     }
@@ -95,7 +106,7 @@ class MovieDetailsViewController: UIViewController {
         quickDetailsView.addSubview(userScoreLabelNumber)
         quickDetailsView.addSubview(userScoreLabelText)
 
-        view.addSubview(quickDetailsView)
+        contentView.addSubview(quickDetailsView)
     }
     
     private func createSummaryAndCastView(for movieDetails: MovieDetailsModel){
@@ -120,12 +131,16 @@ class MovieDetailsViewController: UIViewController {
         summaryAndCastView.addSubview(summaryLabel)
         summaryAndCastView.addSubview(crewStackView)
 
-        view.addSubview(summaryAndCastView)
+        contentView.addSubview(summaryAndCastView)
     }
     
     private func styleViews(){
         styleQuickDetailsView()
         styleSummaryAndCastView()
+        
+        // scroll view
+        contentView.autoMatch(.width, to: .width, of: view)
+        contentView.autoSetDimension(.height, toSize: view.bounds.height)
     }
     
     private func styleQuickDetailsView(){
@@ -180,6 +195,10 @@ class MovieDetailsViewController: UIViewController {
     }
     
     private func defineLayoutForViews(){
+        
+        scrollView.autoPinEdgesToSuperviewEdges()
+        contentView.autoPinEdgesToSuperviewEdges()
+        
         quickDetailsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
         summaryAndCastView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
         summaryAndCastView.autoPinEdge(.top, to: .bottom, of: quickDetailsView, withOffset: 0)
