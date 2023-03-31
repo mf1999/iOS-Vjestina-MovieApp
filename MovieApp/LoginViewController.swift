@@ -5,7 +5,7 @@ import PureLayout
 // https://stackoverflow.com/questions/25367502/create-space-at-the-beginning-of-a-uitextfield
 class PaddedTextField: UITextField {
 
-    let padding = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+    let padding = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
 
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.inset(by: padding)
@@ -25,6 +25,9 @@ class LogInViewController: UIViewController{
     private let viewBackgroundColor = UIColor(red: 19/255, green: 59/255, blue: 99/255, alpha: 1)
     private let inputBackgroundColor = UIColor(red:21/255, green:77/255, blue:133/255, alpha:1)
     private let buttonBackgroundColor = UIColor(red:76/255, green: 178/255, blue:223/255, alpha:1)
+        
+    private var scrollView: UIScrollView!
+    private var contentView: UIView!
     
     private var signInLabel: UILabel!
     
@@ -58,10 +61,18 @@ class LogInViewController: UIViewController{
         //tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
+        //create scroll view
+        scrollView = UIScrollView()
+        scrollView.bounces = true
+        view.addSubview(scrollView)
+        
+        contentView = UIView()
+        scrollView.addSubview(contentView)
+        
         // create the sign in label
         signInLabel = UILabel()
         signInLabel.text = "Sign in"
-        view.addSubview(signInLabel)
+        contentView.addSubview(signInLabel)
         
         // Create the email form subview
         emailForm = UIView()
@@ -78,7 +89,7 @@ class LogInViewController: UIViewController{
         
         emailForm.addSubview(emailLabel)
         emailForm.addSubview(emailInput)
-        view.addSubview(emailForm)
+        contentView.addSubview(emailForm)
         
         // Create the password form subview
         passwordForm = UIView()
@@ -95,15 +106,19 @@ class LogInViewController: UIViewController{
         
         passwordForm.addSubview(passwordLabel)
         passwordForm.addSubview(passwordInput)
-        view.addSubview(passwordForm)
+        contentView.addSubview(passwordForm)
         
         // Create the sign in button
         signInButton = UIButton()
-        view.addSubview(signInButton)
+        contentView.addSubview(signInButton)
     }
     
     private func styleViews(){
         view.backgroundColor = self.viewBackgroundColor
+        
+        // scroll view
+        contentView.autoMatch(.width, to: .width, of: view)
+        contentView.autoSetDimension(.height, toSize: view.bounds.height)
         
         // sign in label
         signInLabel.textColor = .white
@@ -146,10 +161,16 @@ class LogInViewController: UIViewController{
     }
     
     private func defineLayoutForViews(){
+        
+        //scroll view
+        scrollView.autoPinEdgesToSuperviewSafeArea()
+        contentView.autoPinEdgesToSuperviewEdges()
+        
         //sign in label
         signInLabel.autoPinEdge(toSuperviewSafeArea: .top, withInset: 92 - view.safeAreaInsets.top)
         signInLabel.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
         signInLabel.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
+//        signInLabel.autoPinEdge(.bottom, to: .top, of: emailForm, withOffset: 0)
         
         //email form
         emailLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 0)

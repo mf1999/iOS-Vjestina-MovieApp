@@ -6,9 +6,7 @@ import MovieAppData
 
 
 class MovieDetailsViewController: UIViewController {
-    
-    private var castNumber: Int!
-    
+        
     private let darkGreen = UIColor(red: 45/255, green: 125/255, blue: 53/255, alpha: 1.0)
     private let darkBlue = UIColor(red: 0.043, green: 0.145, blue: 0.247, alpha: 1)
     
@@ -47,7 +45,6 @@ class MovieDetailsViewController: UIViewController {
     
     private func createViews(){
         let movieDetails = MovieUseCase().getDetails(id: 111161)
-        castNumber = movieDetails!.crewMembers.count
         createQuickDetailsView(for: movieDetails!)
         createSummaryAndCastView(for: movieDetails!)
     }
