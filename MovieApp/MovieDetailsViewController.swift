@@ -1,4 +1,3 @@
-import Foundation
 import UIKit
 import PureLayout
 import Kingfisher
@@ -6,10 +5,7 @@ import MovieAppData
 
 
 class MovieDetailsViewController: UIViewController {
-        
-    private let darkGreen = UIColor(red: 45/255, green: 125/255, blue: 53/255, alpha: 1.0)
-    private let darkBlue = UIColor(red: 0.043, green: 0.145, blue: 0.247, alpha: 1)
-    
+    private var movieDetails: MovieDetailsModel!
     private var quickDetailsView: UIView! // Top one with the background image
     private var summaryAndCastView: UIView! // Bottom one with the cast and crew
     
@@ -35,10 +31,13 @@ class MovieDetailsViewController: UIViewController {
     
     private var crewStackView: UIStackView!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        movieDetails = MovieUseCase().getDetails(id: 111161)
         buildViews()
     }
+    
     
     private func buildViews(){
         createViews()
@@ -46,11 +45,9 @@ class MovieDetailsViewController: UIViewController {
         defineLayoutForViews()
     }
     
+    
     private func createViews(){
-        let movieDetails = MovieUseCase().getDetails(id: 111161)
-        
         scrollView = UIScrollView()
-        scrollView.bounces = true
         view.addSubview(scrollView)
         
         contentView = UIView()
@@ -60,91 +57,65 @@ class MovieDetailsViewController: UIViewController {
         createSummaryAndCastView(for: movieDetails!)
     }
     
+    
     private func createQuickDetailsView(for movieDetails: MovieDetailsModel){
         quickDetailsView = UIView()
-        
-        // Create background image
+        contentView.addSubview(quickDetailsView)
+
         movieImageView = UIImageView()
-        movieImageView.kf.setImage(with: URL(string: movieDetails.imageUrl))
-        
-        // Create FAVOURITE button
+        quickDetailsView.addSubview(movieImageView)
+
         favouriteButton = UIButton(type: .custom)
-        
+        quickDetailsView.addSubview(favouriteButton)
+
         favouriteSymbol = UIImageView()
-        favouriteSymbol.image = UIImage(named: "StarVector")
-        
         favouriteButton.addSubview(favouriteSymbol)
         
-        //Create movie genres and runtime text label
         movieGenresAndRuntime = UILabel()
-        movieGenresAndRuntime.attributedText = getCategoriesAndRuntime(for: movieDetails)
-        
+        quickDetailsView.addSubview(movieGenresAndRuntime)
+
         //Create release date and country label
         releaseDateAndCountry = UILabel()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let date = dateFormatter.date(from: movieDetails.releaseDate)
-        dateFormatter.dateFormat = "MM/dd/yyy"
-        releaseDateAndCountry.text = dateFormatter.string(from: date!) + " (US)"
-        
+        quickDetailsView.addSubview(releaseDateAndCountry)
+
         // Create name and year label
         nameAndYear = UILabel()
-        nameAndYear.attributedText = self.getNameAndYear(for: movieDetails)
-        
+        quickDetailsView.addSubview(nameAndYear)
+
         // Create movie score and label
         userScoreLabelNumber = UILabel()
-        userScoreLabelText = UILabel()
-        
-        userScoreLabelNumber.text = String(movieDetails.rating)
-        userScoreLabelText.text = "User score"
-        
-        quickDetailsView.addSubview(movieImageView)
-        quickDetailsView.addSubview(favouriteButton)
-        quickDetailsView.addSubview(movieGenresAndRuntime)
-        quickDetailsView.addSubview(releaseDateAndCountry)
-        quickDetailsView.addSubview(nameAndYear)
         quickDetailsView.addSubview(userScoreLabelNumber)
-        quickDetailsView.addSubview(userScoreLabelText)
 
-        contentView.addSubview(quickDetailsView)
+        userScoreLabelText = UILabel()
+        quickDetailsView.addSubview(userScoreLabelText)
     }
+    
     
     private func createSummaryAndCastView(for movieDetails: MovieDetailsModel){
         summaryAndCastView = UIView()
-        
+        contentView.addSubview(summaryAndCastView)
+
         overviewLabel = UILabel()
-        overviewLabel.text = "Overview"
-        
+        summaryAndCastView.addSubview(overviewLabel)
+
         summaryLabel = UILabel()
-        summaryLabel.text = movieDetails.summary
-        
-        // Collection view stuff
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-        layout.itemSize = CGSize(width: 60, height: 60)
+        summaryAndCastView.addSubview(summaryLabel)
         
         crewStackView = UIStackView()
-        
-        fillStackView(with: movieDetails.crewMembers)
-        
-        summaryAndCastView.addSubview(overviewLabel)
-        summaryAndCastView.addSubview(summaryLabel)
         summaryAndCastView.addSubview(crewStackView)
 
-        contentView.addSubview(summaryAndCastView)
     }
+    
     
     private func styleViews(){
+        scrollView.bounces = true
         styleQuickDetailsView()
         styleSummaryAndCastView()
-        
-        // scroll view
-        contentView.autoMatch(.width, to: .width, of: view)
-        contentView.autoSetDimension(.height, toSize: view.bounds.height)
     }
     
+    
     private func styleQuickDetailsView(){
-        movieImageView.autoSetDimension(.height, toSize: 327.0)
+        movieImageView.kf.setImage(with: URL(string: movieDetails.imageUrl))
         movieImageView.contentMode = .scaleAspectFill
         self.quickDetailsView.sendSubviewToBack(movieImageView)
         
@@ -154,57 +125,74 @@ class MovieDetailsViewController: UIViewController {
         favouriteButton.layer.cornerRadius = 0.5 * favouriteButton.bounds.size.width
         favouriteButton.addTarget(self, action: #selector(self.favouriteButtonTapped), for: .touchUpInside)
         
+        favouriteSymbol.image = UIImage(named: "StarVector")
         favouriteSymbol.autoSetDimension(.width, toSize: 14)
         favouriteSymbol.autoSetDimension(.height, toSize: 13)
         
+        movieGenresAndRuntime.attributedText = getCategoriesAndRuntime(for: movieDetails)
         movieGenresAndRuntime.textColor = .white
         movieGenresAndRuntime.textAlignment = .left
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date = dateFormatter.date(from: movieDetails.releaseDate)
+        dateFormatter.dateFormat = "MM/dd/yyy"
+        releaseDateAndCountry.text = dateFormatter.string(from: date!) + " (US)"
         releaseDateAndCountry.textColor = .white
         releaseDateAndCountry.textAlignment = .left
         
+        nameAndYear.attributedText = self.getNameAndYear(for: movieDetails)
         nameAndYear.textColor = .white
         nameAndYear.textAlignment = .left
         nameAndYear.lineBreakMode = .byWordWrapping
         nameAndYear.numberOfLines = 0
         
+        userScoreLabelNumber.text = String(movieDetails.rating)
         userScoreLabelNumber.font = .systemFont(ofSize: 16, weight: .bold)
         userScoreLabelNumber.textColor = .white
         
+        userScoreLabelText.text = "User score"
         userScoreLabelText.font = .systemFont(ofSize: 16, weight: .semibold)
         userScoreLabelText.textColor = .white
     }
     
+    
     private func styleSummaryAndCastView(){
         summaryAndCastView.backgroundColor = .white
         
-        overviewLabel.textColor = self.darkBlue
+        overviewLabel.text = "Overview"
+        overviewLabel.textColor = UIColor.darkBlue()
         overviewLabel.font = .systemFont(ofSize: 20, weight: .bold)
-        
+
+        summaryLabel.text = movieDetails.summary
         summaryLabel.textColor = .black
         summaryLabel.textAlignment = .left
         summaryLabel.font = .systemFont(ofSize: 14, weight: .regular)
         summaryLabel.lineBreakMode = .byWordWrapping
         summaryLabel.numberOfLines = 0
         
+        fillStackView(with: movieDetails.crewMembers)
         crewStackView.axis = .vertical
         crewStackView.alignment = .fill
         crewStackView.distribution = .fill
         crewStackView.spacing = 24
-        
     }
     
+    
     private func defineLayoutForViews(){
-        
+        // scroll view
         scrollView.autoPinEdgesToSuperviewEdges()
         contentView.autoPinEdgesToSuperviewEdges()
+        contentView.autoMatch(.width, to: .width, of: view)
+        contentView.autoSetDimension(.height, toSize: view.bounds.height)
         
         quickDetailsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
         summaryAndCastView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
         summaryAndCastView.autoPinEdge(.top, to: .bottom, of: quickDetailsView, withOffset: 0)
         
+        movieImageView.autoSetDimension(.height, toSize: 327.0)
         movieImageView.autoPinEdgesToSuperviewEdges()
-        
+
         favouriteSymbol.autoCenterInSuperview()
         favouriteButton.autoPinEdge(toSuperviewEdge: .leading, withInset: 20)
         favouriteButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 20)
@@ -236,14 +224,13 @@ class MovieDetailsViewController: UIViewController {
         crewStackView.autoPinEdge(.top, to: .bottom, of: summaryLabel, withOffset: 5)
         crewStackView.autoPinEdge(toSuperviewEdge: .leading, withInset: 20)
         crewStackView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 20)
-//        crewStackView.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0)
     }
     
     @objc
     private func favouriteButtonTapped(){
         if favouriteButton.backgroundColor == .darkGray {
-            favouriteButton.backgroundColor = self.darkGreen
-        } else if favouriteButton.backgroundColor == self.darkGreen{
+            favouriteButton.backgroundColor = UIColor.darkGreen()
+        } else if favouriteButton.backgroundColor == UIColor.darkGreen() {
             favouriteButton.backgroundColor = .darkGray
         }
     }
@@ -265,7 +252,6 @@ class MovieDetailsViewController: UIViewController {
         
         normalString.append(attributedString)
         return normalString
-        
     }
     
     private func getNameAndYear(for details: MovieDetailsModel) -> NSMutableAttributedString {
@@ -284,14 +270,14 @@ class MovieDetailsViewController: UIViewController {
     
     private func fillStackView(with crewMembers: [MovieCrewMemberModel]){
         func getHorStack() -> UIStackView{
-           let horizontalStackView = UIStackView()
-           horizontalStackView.axis = .horizontal
-           horizontalStackView.alignment = .fill
-           horizontalStackView.distribution = .fillProportionally // names look better than .fillEqualy
-           horizontalStackView.spacing = 16
-           
-           return horizontalStackView
-       }
+            let horizontalStackView = UIStackView()
+            horizontalStackView.axis = .horizontal
+            horizontalStackView.alignment = .fill
+            horizontalStackView.distribution = .fillProportionally // names look better than .fillEqualy
+            horizontalStackView.spacing = 16
+            
+            return horizontalStackView
+        }
         
         var ctr = 0
         var horizontalStackView: UIStackView = getHorStack()
@@ -332,5 +318,5 @@ class MovieDetailsViewController: UIViewController {
         }
         crewStackView.addArrangedSubview(horizontalStackView)
     }
-
+    
 }

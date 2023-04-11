@@ -1,31 +1,7 @@
-import Foundation
 import UIKit
 import PureLayout
 
-// https://stackoverflow.com/questions/25367502/create-space-at-the-beginning-of-a-uitextfield
-class PaddedTextField: UITextField {
-
-    let padding = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
-
-    override open func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.inset(by: padding)
-    }
-
-    override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.inset(by: padding)
-    }
-
-    override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.inset(by: padding)
-    }
-}
-
 class LogInViewController: UIViewController{
-    
-    private let viewBackgroundColor = UIColor(red: 19/255, green: 59/255, blue: 99/255, alpha: 1)
-    private let inputBackgroundColor = UIColor(red:21/255, green:77/255, blue:133/255, alpha:1)
-    private let buttonBackgroundColor = UIColor(red:76/255, green: 178/255, blue:223/255, alpha:1)
-        
     private var scrollView: UIScrollView!
     private var contentView: UIView!
     
@@ -41,29 +17,23 @@ class LogInViewController: UIViewController{
     
     private var signInButton: UIButton!
     
+    
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         buildViews()
     }
     
+    
     private func buildViews(){
-        
         createViews()
         styleViews()
         defineLayoutForViews()
     }
     
+    
     private func createViews(){
-        
-        // https://stackoverflow.com/questions/24126678/close-ios-keyboard-by-touching-anywhere-using-swift
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-        //tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-        
         //create scroll view
         scrollView = UIScrollView()
-        scrollView.bounces = true
         view.addSubview(scrollView)
         
         contentView = UIView()
@@ -71,21 +41,12 @@ class LogInViewController: UIViewController{
         
         // create the sign in label
         signInLabel = UILabel()
-        signInLabel.text = "Sign in"
         contentView.addSubview(signInLabel)
         
         // Create the email form subview
         emailForm = UIView()
-        
         emailLabel = UILabel()
-        emailLabel.text = "Email address"
-        
         emailInput = PaddedTextField()
-        // https://stackoverflow.com/questions/26076054/changing-placeholder-text-color-with-swift
-        emailInput.attributedPlaceholder = NSAttributedString(
-            string: "example@email.com",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.298, green: 0.698, blue: 0.875, alpha: 1)]
-        )
         
         emailForm.addSubview(emailLabel)
         emailForm.addSubview(emailInput)
@@ -93,16 +54,8 @@ class LogInViewController: UIViewController{
         
         // Create the password form subview
         passwordForm = UIView()
-        
         passwordLabel = UILabel()
-        passwordLabel.text = "Password"
-        
         passwordInput = PaddedTextField()
-        // https://stackoverflow.com/questions/26076054/changing-placeholder-text-color-with-swift
-        passwordInput.attributedPlaceholder = NSAttributedString(
-            string: "Password",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.298, green: 0.698, blue: 0.875, alpha: 1)]
-        )
         
         passwordForm.addSubview(passwordLabel)
         passwordForm.addSubview(passwordInput)
@@ -113,37 +66,46 @@ class LogInViewController: UIViewController{
         contentView.addSubview(signInButton)
     }
     
+    
     private func styleViews(){
-        view.backgroundColor = self.viewBackgroundColor
-        
-        // scroll view
-        contentView.autoMatch(.width, to: .width, of: view)
-        contentView.autoSetDimension(.height, toSize: view.bounds.height)
-        
+        view.backgroundColor = UIColor.viewBackgroundColor()
+        scrollView.bounces = true
+
         // sign in label
+        signInLabel.text = "Sign in"
         signInLabel.textColor = .white
         signInLabel.textAlignment = .center
         signInLabel.font = .systemFont(ofSize: 24, weight: .bold)
         
         //email form
+        emailLabel.text = "Email address"
         emailLabel.textColor = .white
         emailLabel.textAlignment = .left
         emailLabel.font = .systemFont(ofSize: 14, weight: .semibold)
         
-        emailInput.backgroundColor = self.inputBackgroundColor
-        emailInput.layer.borderColor = self.buttonBackgroundColor.cgColor
+        emailInput.attributedPlaceholder = NSAttributedString(
+            string: "example@email.com",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.298, green: 0.698, blue: 0.875, alpha: 1)]
+        )
+        emailInput.backgroundColor = UIColor.inputBackgroundColor()
+        emailInput.layer.borderColor = UIColor.buttonBackgroundColor().cgColor
         emailInput.textColor = UIColor(red: 0.298, green: 0.698, blue: 0.875, alpha: 1)
         emailInput.autocapitalizationType = .none
         emailInput.layer.cornerRadius = 10
         emailInput.layer.borderWidth =  1
         
         // password form
+        passwordLabel.text = "Password"
         passwordLabel.textColor = .white
         passwordLabel.textAlignment = .left
         passwordLabel.font = .systemFont(ofSize: 14, weight: .semibold)
-
-        passwordInput.backgroundColor = self.inputBackgroundColor
-        passwordInput.layer.borderColor = self.buttonBackgroundColor.cgColor
+        
+        passwordInput.attributedPlaceholder = NSAttributedString(
+            string: "Password",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.298, green: 0.698, blue: 0.875, alpha: 1)]
+        )
+        passwordInput.backgroundColor = UIColor.inputBackgroundColor()
+        passwordInput.layer.borderColor = UIColor.buttonBackgroundColor().cgColor
         passwordInput.textColor = UIColor(red: 0.298, green: 0.698, blue: 0.875, alpha: 1)
         passwordInput.isSecureTextEntry = true
         passwordInput.autocorrectionType = .no
@@ -155,22 +117,22 @@ class LogInViewController: UIViewController{
         signInButton.setTitle("Sign in", for: .normal)
         signInButton.setTitleColor(.white, for: .normal)
         signInButton.layer.cornerRadius = 10
-        signInButton.backgroundColor = self.buttonBackgroundColor
-        
-
+        signInButton.backgroundColor = UIColor.buttonBackgroundColor()
     }
     
+    
     private func defineLayoutForViews(){
-        
         //scroll view
         scrollView.autoPinEdgesToSuperviewSafeArea()
         contentView.autoPinEdgesToSuperviewEdges()
+        contentView.autoMatch(.width, to: .width, of: view)
+        contentView.autoSetDimension(.height, toSize: view.bounds.height)
         
         //sign in label
         signInLabel.autoPinEdge(toSuperviewSafeArea: .top, withInset: 92 - view.safeAreaInsets.top)
         signInLabel.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
         signInLabel.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
-//        signInLabel.autoPinEdge(.bottom, to: .top, of: emailForm, withOffset: 0)
+        //        signInLabel.autoPinEdge(.bottom, to: .top, of: emailForm, withOffset: 0)
         
         //email form
         emailLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 0)
@@ -205,13 +167,5 @@ class LogInViewController: UIViewController{
         signInButton.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 32)
         signInButton.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 32)
         signInButton.autoSetDimension(.height, toSize: 40)
-
-    }
-    
-    // Calls this function when the tap is recognized.
-    // https://stackoverflow.com/questions/24126678/close-ios-keyboard-by-touching-anywhere-using-swift
-    @objc func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
-        view.endEditing(true)
     }
 }
