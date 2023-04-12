@@ -21,4 +21,8 @@ extension UIColor {
     class func darkBlue() -> UIColor {
         return UIColor(red: 0.043, green: 0.145, blue: 0.247, alpha: 1)
     }
+    
+    class func favouriteCircleColor() -> UIColor {
+        return UIColor(red: 11/255, green: 37/255, blue: 63/255, alpha: 0.6)
+    }
 }

@@ -20,7 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
 //        let activeViewController = LogInViewController()
 //        let activeViewController = MovieDetailsViewController()
-        let activeViewController = MovieListViewController()
+//        let activeViewController = MovieListViewController()
+        let activeViewController = RecommendedMoviesViewController()
         
         window.rootViewController = activeViewController
         self.window = window
