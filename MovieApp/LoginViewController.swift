@@ -23,13 +23,11 @@ class LogInViewController: UIViewController{
         buildViews()
     }
     
-    
     private func buildViews(){
         createViews()
         styleViews()
         defineLayoutForViews()
     }
-    
     
     private func createViews(){
         //create scroll view
@@ -68,7 +66,7 @@ class LogInViewController: UIViewController{
     
     
     private func styleViews(){
-        view.backgroundColor = UIColor.viewBackgroundColor()
+        view.backgroundColor = UIColor.viewBackgroundColor
         scrollView.bounces = true
 
         // sign in label
@@ -87,8 +85,8 @@ class LogInViewController: UIViewController{
             string: "example@email.com",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.298, green: 0.698, blue: 0.875, alpha: 1)]
         )
-        emailInput.backgroundColor = UIColor.inputBackgroundColor()
-        emailInput.layer.borderColor = UIColor.buttonBackgroundColor().cgColor
+        emailInput.backgroundColor = UIColor.inputBackgroundColor
+        emailInput.layer.borderColor = UIColor.buttonBackgroundColor.cgColor
         emailInput.textColor = UIColor(red: 0.298, green: 0.698, blue: 0.875, alpha: 1)
         emailInput.autocapitalizationType = .none
         emailInput.layer.cornerRadius = 10
@@ -104,8 +102,8 @@ class LogInViewController: UIViewController{
             string: "Password",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.298, green: 0.698, blue: 0.875, alpha: 1)]
         )
-        passwordInput.backgroundColor = UIColor.inputBackgroundColor()
-        passwordInput.layer.borderColor = UIColor.buttonBackgroundColor().cgColor
+        passwordInput.backgroundColor = UIColor.inputBackgroundColor
+        passwordInput.layer.borderColor = UIColor.buttonBackgroundColor.cgColor
         passwordInput.textColor = UIColor(red: 0.298, green: 0.698, blue: 0.875, alpha: 1)
         passwordInput.isSecureTextEntry = true
         passwordInput.autocorrectionType = .no
@@ -117,9 +115,8 @@ class LogInViewController: UIViewController{
         signInButton.setTitle("Sign in", for: .normal)
         signInButton.setTitleColor(.white, for: .normal)
         signInButton.layer.cornerRadius = 10
-        signInButton.backgroundColor = UIColor.buttonBackgroundColor()
+        signInButton.backgroundColor = UIColor.buttonBackgroundColor
     }
-    
     
     private func defineLayoutForViews(){
         //scroll view
@@ -132,7 +129,6 @@ class LogInViewController: UIViewController{
         signInLabel.autoPinEdge(toSuperviewSafeArea: .top, withInset: 92 - view.safeAreaInsets.top)
         signInLabel.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
         signInLabel.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
-        //        signInLabel.autoPinEdge(.bottom, to: .top, of: emailForm, withOffset: 0)
         
         //email form
         emailLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 0)

@@ -1,7 +1,6 @@
 import UIKit
 import MovieAppData
 
-
 class CategoryCell: UICollectionViewCell {
     
     var movies: [MovieModel]!
@@ -23,7 +22,7 @@ class CategoryCell: UICollectionViewCell {
     
     public func configure(with movies: [MovieModel], from categoryName: String){
         self.movies = movies
-        self.categoryLabel.text = categoryName
+        categoryLabel.text = categoryName
     }
     
     private func buildViews(){
@@ -32,30 +31,28 @@ class CategoryCell: UICollectionViewCell {
         defineLayoutForViews()
     }
     
-    
     private func createViews(){
         categoryLabel = UILabel()
-        self.addSubview(categoryLabel)
+        addSubview(categoryLabel)
         
-        postersCollectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
-        self.addSubview(postersCollectionView)
+        postersCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        addSubview(postersCollectionView)
     }
     
-    
     private func styleViews(){
-        self.backgroundColor = .white
+        backgroundColor = .white
         
-        self.layout.scrollDirection = .horizontal
+        layout.scrollDirection = .horizontal
         
-        self.postersCollectionView.backgroundColor = .white
+        postersCollectionView.backgroundColor = .white
         postersCollectionView.dataSource = self
         postersCollectionView.delegate = self
         postersCollectionView.layer.cornerRadius = 20
         postersCollectionView.layer.masksToBounds = true
         
-        postersCollectionView.register(MoviePosterCell.self, forCellWithReuseIdentifier: self.identifier)
+        postersCollectionView.register(MoviePosterCell.self, forCellWithReuseIdentifier: identifier)
         
-        self.categoryLabel.font = .systemFont(ofSize: 20, weight: .bold)
+        categoryLabel.font = .systemFont(ofSize: 20, weight: .bold)
     }
     
     
@@ -68,15 +65,15 @@ class CategoryCell: UICollectionViewCell {
         postersCollectionView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16)
         postersCollectionView.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0)
     }
-    
 }
 
-
-extension CategoryCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension CategoryCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.movies.count
     }
-    
+}
+
+extension CategoryCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = self.postersCollectionView.dequeueReusableCell(withReuseIdentifier: self.identifier, for: indexPath) as? MoviePosterCell else {
             fatalError("FAILED DEQUEING POSTER CELL")
@@ -85,12 +82,10 @@ extension CategoryCell: UICollectionViewDataSource, UICollectionViewDelegate, UI
         cell.configure(with: URL(string: self.movies[indexPath[1]].imageUrl)!)
         return cell
     }
-    
+}
+
+extension CategoryCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 122, height: 179)
     }
-    
 }
-
-
-

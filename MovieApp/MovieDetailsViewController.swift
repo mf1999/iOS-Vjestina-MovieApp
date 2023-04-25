@@ -3,7 +3,6 @@ import PureLayout
 import Kingfisher
 import MovieAppData
 
-
 class MovieDetailsViewController: UIViewController {
     private var movieDetails: MovieDetailsModel!
     private var quickDetailsView: UIView! // Top one with the background image
@@ -38,13 +37,11 @@ class MovieDetailsViewController: UIViewController {
         buildViews()
     }
     
-    
     private func buildViews(){
         createViews()
         styleViews()
         defineLayoutForViews()
     }
-    
     
     private func createViews(){
         scrollView = UIScrollView()
@@ -56,7 +53,6 @@ class MovieDetailsViewController: UIViewController {
         createQuickDetailsView(for: movieDetails!)
         createSummaryAndCastView(for: movieDetails!)
     }
-    
     
     private func createQuickDetailsView(for movieDetails: MovieDetailsModel){
         quickDetailsView = UIView()
@@ -90,7 +86,6 @@ class MovieDetailsViewController: UIViewController {
         quickDetailsView.addSubview(userScoreLabelText)
     }
     
-    
     private func createSummaryAndCastView(for movieDetails: MovieDetailsModel){
         summaryAndCastView = UIView()
         contentView.addSubview(summaryAndCastView)
@@ -106,13 +101,11 @@ class MovieDetailsViewController: UIViewController {
 
     }
     
-    
     private func styleViews(){
         scrollView.bounces = true
         styleQuickDetailsView()
         styleSummaryAndCastView()
     }
-    
     
     private func styleQuickDetailsView(){
         movieImageView.kf.setImage(with: URL(string: movieDetails.imageUrl))
@@ -123,7 +116,7 @@ class MovieDetailsViewController: UIViewController {
         favouriteButton.clipsToBounds = true
         favouriteButton.backgroundColor = .darkGray
         favouriteButton.layer.cornerRadius = 0.5 * favouriteButton.bounds.size.width
-        favouriteButton.addTarget(self, action: #selector(self.favouriteButtonTapped), for: .touchUpInside)
+//        favouriteButton.addTarget(self, action: #selector(self.favouriteButtonTapped), for: .touchUpInside)
         
         favouriteSymbol.image = UIImage(named: "StarVector")
         favouriteSymbol.autoSetDimension(.width, toSize: 14)
@@ -156,12 +149,11 @@ class MovieDetailsViewController: UIViewController {
         userScoreLabelText.textColor = .white
     }
     
-    
     private func styleSummaryAndCastView(){
         summaryAndCastView.backgroundColor = .white
         
         overviewLabel.text = "Overview"
-        overviewLabel.textColor = UIColor.darkBlue()
+        overviewLabel.textColor = UIColor.darkBlue
         overviewLabel.font = .systemFont(ofSize: 20, weight: .bold)
 
         summaryLabel.text = movieDetails.summary
@@ -177,7 +169,6 @@ class MovieDetailsViewController: UIViewController {
         crewStackView.distribution = .fill
         crewStackView.spacing = 24
     }
-    
     
     private func defineLayoutForViews(){
         // scroll view
@@ -226,14 +217,14 @@ class MovieDetailsViewController: UIViewController {
         crewStackView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 20)
     }
     
-    @objc
-    private func favouriteButtonTapped(){
-        if favouriteButton.backgroundColor == .darkGray {
-            favouriteButton.backgroundColor = UIColor.darkGreen()
-        } else if favouriteButton.backgroundColor == UIColor.darkGreen() {
-            favouriteButton.backgroundColor = .darkGray
-        }
-    }
+//    @objc
+//    private func favouriteButtonTapped(){
+//        if favouriteButton.backgroundColor == .darkGray {
+//            favouriteButton.backgroundColor = UIColor.darkGreen
+//        } else if favouriteButton.backgroundColor == UIColor.darkGreen {
+//            favouriteButton.backgroundColor = .darkGray
+//        }
+//    }
     
     private func getCategoriesAndRuntime(for details: MovieDetailsModel) -> NSMutableAttributedString {
         var categoriesText: String = ""

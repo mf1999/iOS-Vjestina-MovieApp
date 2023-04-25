@@ -18,10 +18,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-//        let activeViewController = LogInViewController()
+        let activeViewController = LogInViewController()
 //        let activeViewController = MovieDetailsViewController()
 //        let activeViewController = MovieListViewController()
-        let activeViewController = RecommendedMoviesViewController()
+//        let activeViewController = RecommendedMoviesViewController()
         
         window.rootViewController = activeViewController
         self.window = window

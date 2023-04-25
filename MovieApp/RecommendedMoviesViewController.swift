@@ -5,7 +5,7 @@ import MovieAppData
 
 class RecommendedMoviesViewController: UIViewController {
     
-    private var collectionView: UICollectionView!
+    private var categoriesCollectionView: UICollectionView!
     private let layout = UICollectionViewFlowLayout()
     
     private let identifier = "HorizontalCell"
@@ -15,45 +15,42 @@ class RecommendedMoviesViewController: UIViewController {
         buildViews()
     }
     
-    
     private func buildViews(){
         createViews()
         styleViews()
         defineLayoutForViews()
     }
     
-    
     private func createViews(){
-        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
-        view.addSubview(self.collectionView)
+        categoriesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
+        view.addSubview(categoriesCollectionView)
     }
     
     private func styleViews(){
-        self.view.backgroundColor = .white
+        view.backgroundColor = .white
         
-        self.collectionView.backgroundColor = .white
-        self.collectionView.dataSource = self
-        self.collectionView.delegate = self
+        categoriesCollectionView.backgroundColor = .white
+        categoriesCollectionView.dataSource = self
+        categoriesCollectionView.delegate = self
         
-        self.collectionView.register(CategoryCell.self, forCellWithReuseIdentifier: identifier)
+        categoriesCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: identifier)
     }
     
-    
     private func defineLayoutForViews(){
-        collectionView.autoPinEdgesToSuperviewSafeArea(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
+        categoriesCollectionView.autoPinEdgesToSuperviewSafeArea(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
     }
 }
 
-
-extension RecommendedMoviesViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension RecommendedMoviesViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 3
     }
-    
-    
+}
+
+extension RecommendedMoviesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? CategoryCell else {
+        guard let cell = categoriesCollectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? CategoryCell else {
             fatalError("FAILED DEQUEING HORIZONTAL CELL")
         }
         
@@ -67,8 +64,9 @@ extension RecommendedMoviesViewController: UICollectionViewDataSource, UICollect
 
         return cell
     }
-    
-    
+}
+
+extension RecommendedMoviesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.view.bounds.width, height: 179+16+28+40)
     }
@@ -77,8 +75,4 @@ extension RecommendedMoviesViewController: UICollectionViewDataSource, UICollect
         super.viewWillTransition(to: size, with: coordinator)
         self.layout.invalidateLayout()
     }
-    
 }
-
-
-
