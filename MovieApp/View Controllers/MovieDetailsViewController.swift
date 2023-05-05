@@ -47,6 +47,7 @@ class MovieDetailsViewController: UIViewController {
     private func buildViews(){
         createViews()
         styleViews()
+        animateViews()
         defineLayoutForViews()
     }
     
@@ -179,6 +180,29 @@ class MovieDetailsViewController: UIViewController {
         crewStackView.alignment = .fill
         crewStackView.distribution = .fill
         crewStackView.spacing = 24
+    }
+    
+    private func animateViews(){
+        userScoreLabelNumber.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        userScoreLabelText.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        nameAndYear.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        releaseDateAndCountry.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        movieGenresAndRuntime.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        summaryLabel.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        crewStackView.alpha = 0.0
+        
+        UIView.animate(withDuration: 0.2, delay: 0.7, options: .curveEaseOut, animations: {
+            self.userScoreLabelNumber.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+            self.userScoreLabelText.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+            self.nameAndYear.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+            self.releaseDateAndCountry.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+            self.movieGenresAndRuntime.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+            self.summaryLabel.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+        }, completion: nil)
+        
+        UIView.animate(withDuration: 0.3, delay: 1.3, options: .curveEaseOut, animations: {
+            self.crewStackView.alpha = 1.0
+        }, completion: nil)
     }
     
     private func defineLayoutForViews(){
