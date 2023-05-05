@@ -110,7 +110,6 @@ class MovieDetailsViewController: UIViewController {
     
     private func styleViews(){
         scrollView.bounces = true
-        navigationItem.title = "Movie details"
         styleQuickDetailsView()
         styleSummaryAndCastView()
     }

@@ -24,7 +24,7 @@ class MovieListRouter: RouterProtocol{
     }
     
     func createViews(){
-        movieListVC = MovieListViewController()
+        movieListVC = MovieListViewController(router: self)
         navigationController.pushViewController(movieListVC, animated: false)
     }
     
@@ -39,6 +39,7 @@ class MovieListRouter: RouterProtocol{
     
     func showMovieDetails(movieDetails: MovieDetailsModel){
         movieDetailsVC = MovieDetailsViewController(movieDetails: movieDetails)
+        movieDetailsVC.title = "Movie details"
         navigationController.pushViewController(movieDetailsVC, animated: true)
     }
 }

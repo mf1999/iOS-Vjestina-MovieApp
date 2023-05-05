@@ -164,9 +164,5 @@ class LogInViewController: UIViewController{
         signInButton.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 32)
         signInButton.autoSetDimension(.height, toSize: 40)
     }
-    
-    @objc func handleSignInButton(){
-        let vc = MovieListViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
+
 }

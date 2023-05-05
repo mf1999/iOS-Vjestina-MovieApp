@@ -7,6 +7,7 @@ class RecommendedAndFavsRouter: RouterProtocol{
     
     private var recommenedMoviesVC: RecommendedMoviesViewController!
     private var favouritesVC: FavouritesViewController!
+    private var movieDetailsVC: MovieDetailsViewController!
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -51,7 +52,8 @@ class RecommendedAndFavsRouter: RouterProtocol{
     }
     
     func showMovieDetails(movieDetails: MovieDetailsModel){
-        let vc = MovieDetailsViewController(movieDetails: movieDetails)
-        navigationController.pushViewController(vc, animated: true)
+        movieDetailsVC = MovieDetailsViewController(movieDetails: movieDetails)
+        movieDetailsVC.title = "Movie details"
+        navigationController.pushViewController(movieDetailsVC, animated: true)
     }
 }
