@@ -19,11 +19,18 @@ class RecommendedAndFavsRouter: RouterProtocol{
     
     // Fixes the navigationBar background color being dependant on the scroll view
     func fixNavBarAppearance(){
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
-        navigationController.navigationBar.standardAppearance = appearance;
+        let navAppearance = UINavigationBarAppearance()
+        navAppearance.configureWithOpaqueBackground()
+        navAppearance.backgroundColor = .white
+        navigationController.navigationBar.standardAppearance = navAppearance;
         navigationController.navigationBar.scrollEdgeAppearance = navigationController.navigationBar.standardAppearance
+    }
+    
+    func fixTabBarAppearance(){
+        let tabAppearance = UITabBarAppearance()
+        tabAppearance.configureWithOpaqueBackground()
+        tabAppearance.backgroundColor = .white
+        tabBarController.tabBar.scrollEdgeAppearance = tabBarController.tabBar.standardAppearance
     }
     
     func createViews(){
@@ -38,6 +45,7 @@ class RecommendedAndFavsRouter: RouterProtocol{
                                                selectedImage: UIImage(named: "HeartFilledVector"))
         
         tabBarController = UITabBarController()
+        fixTabBarAppearance()
         tabBarController.viewControllers = [navigationController, favouritesVC]
         
     }

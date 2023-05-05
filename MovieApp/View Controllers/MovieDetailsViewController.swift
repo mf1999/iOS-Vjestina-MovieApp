@@ -118,7 +118,7 @@ class MovieDetailsViewController: UIViewController {
     private func styleQuickDetailsView(){
         movieImageView.kf.setImage(with: URL(string: movieDetails.imageUrl))
         movieImageView.contentMode = .scaleAspectFill
-        self.quickDetailsView.sendSubviewToBack(movieImageView)
+//        self.quickDetailsView.sendSubviewToBack(movieImageView)
         
         favouriteButton.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
         favouriteButton.clipsToBounds = true
@@ -209,7 +209,8 @@ class MovieDetailsViewController: UIViewController {
         scrollView.autoPinEdgesToSuperviewSafeArea()
         contentView.autoPinEdgesToSuperviewEdges()
         contentView.autoMatch(.width, to: .width, of: view)
-        contentView.autoSetDimension(.height, toSize: view.bounds.height)
+//        contentView.autoMatch(.height, to: .height, of: view)
+        contentView.autoSetDimension(.height, toSize: 1000)
         
         quickDetailsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
         summaryAndCastView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)

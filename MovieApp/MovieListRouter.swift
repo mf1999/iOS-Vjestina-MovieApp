@@ -16,10 +16,10 @@ class MovieListRouter: RouterProtocol{
     
     // Fixes the navigationBar background color being dependant on the scroll view
     func fixNavBarAppearance(){
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
-        navigationController.navigationBar.standardAppearance = appearance;
+        let navAppearance = UINavigationBarAppearance()
+        navAppearance.configureWithOpaqueBackground()
+        navAppearance.backgroundColor = .white
+        navigationController.navigationBar.standardAppearance = navAppearance;
         navigationController.navigationBar.scrollEdgeAppearance = navigationController.navigationBar.standardAppearance
     }
     
