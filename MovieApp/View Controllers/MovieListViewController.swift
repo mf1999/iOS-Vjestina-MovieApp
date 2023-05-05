@@ -4,7 +4,6 @@ import Kingfisher
 import MovieAppData
 
 class MovieListViewController: UIViewController {
-    
     private var moviesTableView: UITableView!
     private let movies = MovieUseCase().allMovies
     
@@ -40,6 +39,14 @@ class MovieListViewController: UIViewController {
 extension MovieListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movies.count
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let movieID = movies[indexPath.row].id
+        let details = MovieUseCase().getDetails(id: movieID)!
+        let movieDetailsVC = MovieDetailsViewController(movieDetails: details)
+        navigationController!.pushViewController(movieDetailsVC, animated: true)
+        //        router.showMovieDetails(movieDetails: MovieUseCase().getDetails(id: movieID)!)
     }
 }
 

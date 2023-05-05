@@ -1,7 +1,6 @@
 import UIKit
 
 class MovieSummaryCell: UITableViewCell {
-
     public static let identifier = "MovieSummaryCell"
         
     private var moviePoster: UIImageView!

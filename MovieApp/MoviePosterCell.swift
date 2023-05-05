@@ -2,11 +2,9 @@ import UIKit
 import Kingfisher
 
 class MoviePosterCell: UICollectionViewCell {
-    
     var poster: UIImageView!
     var likeButton: UIView!
     var heartImage: UIImageView!
-    
     
     override init(frame: CGRect){
         super.init(frame: frame)

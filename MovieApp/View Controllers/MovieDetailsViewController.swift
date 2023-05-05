@@ -30,10 +30,17 @@ class MovieDetailsViewController: UIViewController {
     
     private var crewStackView: UIStackView!
     
+    init(movieDetails: MovieDetailsModel){
+        super.init(nibName: nil, bundle: nil)
+        self.movieDetails = movieDetails
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        movieDetails = MovieUseCase().getDetails(id: 111161)
         buildViews()
     }
     
@@ -103,6 +110,7 @@ class MovieDetailsViewController: UIViewController {
     
     private func styleViews(){
         scrollView.bounces = true
+        navigationItem.title = "Movie details"
         styleQuickDetailsView()
         styleSummaryAndCastView()
     }
@@ -116,7 +124,6 @@ class MovieDetailsViewController: UIViewController {
         favouriteButton.clipsToBounds = true
         favouriteButton.backgroundColor = .darkGray
         favouriteButton.layer.cornerRadius = 0.5 * favouriteButton.bounds.size.width
-//        favouriteButton.addTarget(self, action: #selector(self.favouriteButtonTapped), for: .touchUpInside)
         
         favouriteSymbol.image = UIImage(named: "StarVector")
         favouriteSymbol.autoSetDimension(.width, toSize: 14)
@@ -125,6 +132,7 @@ class MovieDetailsViewController: UIViewController {
         movieGenresAndRuntime.attributedText = getCategoriesAndRuntime(for: movieDetails)
         movieGenresAndRuntime.textColor = .white
         movieGenresAndRuntime.textAlignment = .left
+        movieGenresAndRuntime.backgroundColor = .blackSemiVisibleColor
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -133,20 +141,24 @@ class MovieDetailsViewController: UIViewController {
         releaseDateAndCountry.text = dateFormatter.string(from: date!) + " (US)"
         releaseDateAndCountry.textColor = .white
         releaseDateAndCountry.textAlignment = .left
+        releaseDateAndCountry.backgroundColor = .blackSemiVisibleColor
         
         nameAndYear.attributedText = self.getNameAndYear(for: movieDetails)
         nameAndYear.textColor = .white
         nameAndYear.textAlignment = .left
         nameAndYear.lineBreakMode = .byWordWrapping
         nameAndYear.numberOfLines = 0
+        nameAndYear.backgroundColor = .blackSemiVisibleColor
         
         userScoreLabelNumber.text = String(movieDetails.rating)
         userScoreLabelNumber.font = .systemFont(ofSize: 16, weight: .bold)
         userScoreLabelNumber.textColor = .white
+        userScoreLabelNumber.backgroundColor = .blackSemiVisibleColor
         
         userScoreLabelText.text = "User score"
         userScoreLabelText.font = .systemFont(ofSize: 16, weight: .semibold)
         userScoreLabelText.textColor = .white
+        userScoreLabelText.backgroundColor = .blackSemiVisibleColor
     }
     
     private func styleSummaryAndCastView(){
@@ -171,8 +183,7 @@ class MovieDetailsViewController: UIViewController {
     }
     
     private func defineLayoutForViews(){
-        // scroll view
-        scrollView.autoPinEdgesToSuperviewEdges()
+        scrollView.autoPinEdgesToSuperviewSafeArea()
         contentView.autoPinEdgesToSuperviewEdges()
         contentView.autoMatch(.width, to: .width, of: view)
         contentView.autoSetDimension(.height, toSize: view.bounds.height)
@@ -183,7 +194,7 @@ class MovieDetailsViewController: UIViewController {
         
         movieImageView.autoSetDimension(.height, toSize: 327.0)
         movieImageView.autoPinEdgesToSuperviewEdges()
-
+        
         favouriteSymbol.autoCenterInSuperview()
         favouriteButton.autoPinEdge(toSuperviewEdge: .leading, withInset: 20)
         favouriteButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 20)
@@ -216,15 +227,6 @@ class MovieDetailsViewController: UIViewController {
         crewStackView.autoPinEdge(toSuperviewEdge: .leading, withInset: 20)
         crewStackView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 20)
     }
-    
-//    @objc
-//    private func favouriteButtonTapped(){
-//        if favouriteButton.backgroundColor == .darkGray {
-//            favouriteButton.backgroundColor = UIColor.darkGreen
-//        } else if favouriteButton.backgroundColor == UIColor.darkGreen {
-//            favouriteButton.backgroundColor = .darkGray
-//        }
-//    }
     
     private func getCategoriesAndRuntime(for details: MovieDetailsModel) -> NSMutableAttributedString {
         var categoriesText: String = ""
@@ -264,7 +266,7 @@ class MovieDetailsViewController: UIViewController {
             let horizontalStackView = UIStackView()
             horizontalStackView.axis = .horizontal
             horizontalStackView.alignment = .fill
-            horizontalStackView.distribution = .fillProportionally // names look better than .fillEqualy
+            horizontalStackView.distribution = .fillEqually//.fillProportionally // names look better than .fillEqualy
             horizontalStackView.spacing = 16
             
             return horizontalStackView
@@ -309,5 +311,4 @@ class MovieDetailsViewController: UIViewController {
         }
         crewStackView.addArrangedSubview(horizontalStackView)
     }
-    
 }

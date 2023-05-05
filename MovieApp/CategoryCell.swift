@@ -2,6 +2,7 @@ import UIKit
 import MovieAppData
 
 class CategoryCell: UICollectionViewCell {
+    var router: RouterProtocol!
     
     var movies: [MovieModel]!
     var categoryLabel: UILabel!
@@ -20,9 +21,10 @@ class CategoryCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func configure(with movies: [MovieModel], from categoryName: String){
+    public func configure(with movies: [MovieModel], from categoryName: String, using router: RouterProtocol){
         self.movies = movies
         categoryLabel.text = categoryName
+        self.router = router
     }
     
     private func buildViews(){
@@ -55,7 +57,6 @@ class CategoryCell: UICollectionViewCell {
         categoryLabel.font = .systemFont(ofSize: 20, weight: .bold)
     }
     
-    
     private func defineLayoutForViews(){
         categoryLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: 16)
         categoryLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 40)
@@ -81,6 +82,11 @@ extension CategoryCell: UICollectionViewDelegate {
         
         cell.configure(with: URL(string: self.movies[indexPath[1]].imageUrl)!)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let movieID = movies[indexPath[1]].id
+        router.showMovieDetails(movieDetails: MovieUseCase().getDetails(id: movieID)!)
     }
 }
 
