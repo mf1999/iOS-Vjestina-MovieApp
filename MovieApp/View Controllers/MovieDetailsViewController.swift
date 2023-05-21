@@ -30,16 +30,24 @@ class MovieDetailsViewController: UIViewController {
     
     private var crewStackView: UIStackView!
     
+    init(movieDetails: MovieDetailsModel){
+        super.init(nibName: nil, bundle: nil)
+        self.movieDetails = movieDetails
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        movieDetails = MovieUseCase().getDetails(id: 111161)
         buildViews()
     }
     
     private func buildViews(){
         createViews()
         styleViews()
+        animateViews()
         defineLayoutForViews()
     }
     
@@ -110,13 +118,11 @@ class MovieDetailsViewController: UIViewController {
     private func styleQuickDetailsView(){
         movieImageView.kf.setImage(with: URL(string: movieDetails.imageUrl))
         movieImageView.contentMode = .scaleAspectFill
-        self.quickDetailsView.sendSubviewToBack(movieImageView)
         
         favouriteButton.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
         favouriteButton.clipsToBounds = true
         favouriteButton.backgroundColor = .darkGray
         favouriteButton.layer.cornerRadius = 0.5 * favouriteButton.bounds.size.width
-//        favouriteButton.addTarget(self, action: #selector(self.favouriteButtonTapped), for: .touchUpInside)
         
         favouriteSymbol.image = UIImage(named: "StarVector")
         favouriteSymbol.autoSetDimension(.width, toSize: 14)
@@ -125,6 +131,7 @@ class MovieDetailsViewController: UIViewController {
         movieGenresAndRuntime.attributedText = getCategoriesAndRuntime(for: movieDetails)
         movieGenresAndRuntime.textColor = .white
         movieGenresAndRuntime.textAlignment = .left
+        movieGenresAndRuntime.backgroundColor = .blackSemiVisibleColor
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -133,20 +140,24 @@ class MovieDetailsViewController: UIViewController {
         releaseDateAndCountry.text = dateFormatter.string(from: date!) + " (US)"
         releaseDateAndCountry.textColor = .white
         releaseDateAndCountry.textAlignment = .left
+        releaseDateAndCountry.backgroundColor = .blackSemiVisibleColor
         
         nameAndYear.attributedText = self.getNameAndYear(for: movieDetails)
         nameAndYear.textColor = .white
         nameAndYear.textAlignment = .left
         nameAndYear.lineBreakMode = .byWordWrapping
         nameAndYear.numberOfLines = 0
+        nameAndYear.backgroundColor = .blackSemiVisibleColor
         
         userScoreLabelNumber.text = String(movieDetails.rating)
         userScoreLabelNumber.font = .systemFont(ofSize: 16, weight: .bold)
         userScoreLabelNumber.textColor = .white
+        userScoreLabelNumber.backgroundColor = .blackSemiVisibleColor
         
         userScoreLabelText.text = "User score"
         userScoreLabelText.font = .systemFont(ofSize: 16, weight: .semibold)
         userScoreLabelText.textColor = .white
+        userScoreLabelText.backgroundColor = .blackSemiVisibleColor
     }
     
     private func styleSummaryAndCastView(){
@@ -170,20 +181,43 @@ class MovieDetailsViewController: UIViewController {
         crewStackView.spacing = 24
     }
     
+    private func animateViews(){
+        userScoreLabelNumber.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        userScoreLabelText.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        nameAndYear.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        releaseDateAndCountry.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        movieGenresAndRuntime.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        summaryLabel.center = CGPoint(x: -view.bounds.width, y: view.bounds.midY)
+        crewStackView.alpha = 0.0
+        
+        UIView.animate(withDuration: 0.2, delay: 0.7, options: .curveEaseOut, animations: {
+            self.userScoreLabelNumber.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+            self.userScoreLabelText.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+            self.nameAndYear.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+            self.releaseDateAndCountry.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+            self.movieGenresAndRuntime.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+            self.summaryLabel.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+        }, completion: nil)
+        
+        UIView.animate(withDuration: 0.3, delay: 1.3, options: .curveEaseOut, animations: {
+            self.crewStackView.alpha = 1.0
+        }, completion: nil)
+    }
+    
     private func defineLayoutForViews(){
-        // scroll view
-        scrollView.autoPinEdgesToSuperviewEdges()
+        scrollView.autoPinEdgesToSuperviewSafeArea()
         contentView.autoPinEdgesToSuperviewEdges()
         contentView.autoMatch(.width, to: .width, of: view)
-        contentView.autoSetDimension(.height, toSize: view.bounds.height)
-        
+//        contentView.autoMatch(.height, to: .height, of: view)
+        contentView.autoSetDimension(.height, toSize: 327*2)
+
         quickDetailsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
+        quickDetailsView.autoPinEdge(.bottom, to: .top, of: summaryAndCastView, withOffset: 0)
         summaryAndCastView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
-        summaryAndCastView.autoPinEdge(.top, to: .bottom, of: quickDetailsView, withOffset: 0)
         
         movieImageView.autoSetDimension(.height, toSize: 327.0)
         movieImageView.autoPinEdgesToSuperviewEdges()
-
+        
         favouriteSymbol.autoCenterInSuperview()
         favouriteButton.autoPinEdge(toSuperviewEdge: .leading, withInset: 20)
         favouriteButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 20)
@@ -212,19 +246,10 @@ class MovieDetailsViewController: UIViewController {
         summaryLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: 16)
         summaryLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16)
         
-        crewStackView.autoPinEdge(.top, to: .bottom, of: summaryLabel, withOffset: 5)
-        crewStackView.autoPinEdge(toSuperviewEdge: .leading, withInset: 20)
-        crewStackView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 20)
+        crewStackView.autoPinEdge(.top, to: .bottom, of: summaryLabel, withOffset: 0)
+        crewStackView.autoPinEdge(.leading, to: .leading, of: summaryAndCastView, withOffset: 20)
+        crewStackView.autoPinEdge(.trailing, to: .trailing, of: summaryAndCastView, withOffset: 20)
     }
-    
-//    @objc
-//    private func favouriteButtonTapped(){
-//        if favouriteButton.backgroundColor == .darkGray {
-//            favouriteButton.backgroundColor = UIColor.darkGreen
-//        } else if favouriteButton.backgroundColor == UIColor.darkGreen {
-//            favouriteButton.backgroundColor = .darkGray
-//        }
-//    }
     
     private func getCategoriesAndRuntime(for details: MovieDetailsModel) -> NSMutableAttributedString {
         var categoriesText: String = ""
@@ -264,7 +289,7 @@ class MovieDetailsViewController: UIViewController {
             let horizontalStackView = UIStackView()
             horizontalStackView.axis = .horizontal
             horizontalStackView.alignment = .fill
-            horizontalStackView.distribution = .fillProportionally // names look better than .fillEqualy
+            horizontalStackView.distribution = .fillEqually//.fillProportionally // names look better than .fillEqualy
             horizontalStackView.spacing = 16
             
             return horizontalStackView
@@ -307,7 +332,7 @@ class MovieDetailsViewController: UIViewController {
             horizontalStackView.addArrangedSubview(filler)
             ctr += 1
         }
+        horizontalStackView.alignment = .fill
         crewStackView.addArrangedSubview(horizontalStackView)
     }
-    
 }

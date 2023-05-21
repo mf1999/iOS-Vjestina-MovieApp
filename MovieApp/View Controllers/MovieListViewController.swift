@@ -4,9 +4,18 @@ import Kingfisher
 import MovieAppData
 
 class MovieListViewController: UIViewController {
-    
+    private var router: RouterProtocol!
     private var moviesTableView: UITableView!
     private let movies = MovieUseCase().allMovies
+    
+    init(router: RouterProtocol){
+        super.init(nibName: nil, bundle: nil)
+        self.router = router
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +49,13 @@ class MovieListViewController: UIViewController {
 extension MovieListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movies.count
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let movieID = movies[indexPath.row].id
+        let details = MovieUseCase().getDetails(id: movieID)!
+        let movieDetailsVC = MovieDetailsViewController(movieDetails: details)
+        router.showMovieDetails(movieDetails: details)
     }
 }
 

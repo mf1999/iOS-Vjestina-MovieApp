@@ -4,14 +4,25 @@ import Kingfisher
 import MovieAppData
 
 class RecommendedMoviesViewController: UIViewController {
+    private var router: RouterProtocol!
     
     private var categoriesCollectionView: UICollectionView!
     private let layout = UICollectionViewFlowLayout()
     
     private let identifier = "HorizontalCell"
     
+    init(router: RouterProtocol){
+        super.init(nibName: nil, bundle: nil)
+        self.router = router
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        tabBarController?.title = "Movie List"
         buildViews()
     }
     
@@ -37,7 +48,7 @@ class RecommendedMoviesViewController: UIViewController {
     }
     
     private func defineLayoutForViews(){
-        categoriesCollectionView.autoPinEdgesToSuperviewSafeArea(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
+        categoriesCollectionView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
     }
 }
 
@@ -55,13 +66,13 @@ extension RecommendedMoviesViewController: UICollectionViewDelegate {
         }
         
         if indexPath[1] == 0 {
-            cell.configure(with: MovieUseCase().popularMovies, from: "What's popular")
+            cell.configure(with: MovieUseCase().popularMovies, from: "What's popular", using: router)
         } else if indexPath[1] == 1 {
-            cell.configure(with: MovieUseCase().freeToWatchMovies, from: "Free to Watch")
+            cell.configure(with: MovieUseCase().freeToWatchMovies, from: "Free to Watch", using: router)
         } else {
-            cell.configure(with: MovieUseCase().trendingMovies, from: "Trending")
+            cell.configure(with: MovieUseCase().trendingMovies, from: "Trending", using: router)
         }
-
+        
         return cell
     }
 }

@@ -17,7 +17,6 @@ class LogInViewController: UIViewController{
     
     private var signInButton: UIButton!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         buildViews()
@@ -116,6 +115,7 @@ class LogInViewController: UIViewController{
         signInButton.setTitleColor(.white, for: .normal)
         signInButton.layer.cornerRadius = 10
         signInButton.backgroundColor = UIColor.buttonBackgroundColor
+        signInButton.addTarget(self, action: "handleSignInButton", for: .touchUpInside)
     }
     
     private func defineLayoutForViews(){
@@ -164,4 +164,5 @@ class LogInViewController: UIViewController{
         signInButton.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 32)
         signInButton.autoSetDimension(.height, toSize: 40)
     }
+
 }
