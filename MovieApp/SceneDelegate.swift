@@ -18,16 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
-//        let activeViewController = LogInViewController()
-//        let activeViewController = MovieDetailsViewController()
-//        let activeViewController = MovieListViewController()
-//        let activeViewController = RecommendedMoviesViewController()
-//        let activeViewController = FavouritesViewController()
-        
         let navigationController = UINavigationController()
-        let appRouter = RecommendedAndFavsRouter(navigationController: navigationController)
-//        let appRouter = MovieListRouter(navigationController: navigationController)
-        appRouter.setStartScreen(in: window)
+        let router = Router(navigationController: navigationController)
+        router.setStartScreen(in: window, for: 0)
         
     }
     

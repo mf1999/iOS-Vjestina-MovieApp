@@ -118,7 +118,6 @@ class MovieDetailsViewController: UIViewController {
     private func styleQuickDetailsView(){
         movieImageView.kf.setImage(with: URL(string: movieDetails.imageUrl))
         movieImageView.contentMode = .scaleAspectFill
-//        self.quickDetailsView.sendSubviewToBack(movieImageView)
         
         favouriteButton.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
         favouriteButton.clipsToBounds = true
@@ -210,11 +209,11 @@ class MovieDetailsViewController: UIViewController {
         contentView.autoPinEdgesToSuperviewEdges()
         contentView.autoMatch(.width, to: .width, of: view)
 //        contentView.autoMatch(.height, to: .height, of: view)
-        contentView.autoSetDimension(.height, toSize: 1000)
-        
+        contentView.autoSetDimension(.height, toSize: 327*2)
+
         quickDetailsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
+        quickDetailsView.autoPinEdge(.bottom, to: .top, of: summaryAndCastView, withOffset: 0)
         summaryAndCastView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
-        summaryAndCastView.autoPinEdge(.top, to: .bottom, of: quickDetailsView, withOffset: 0)
         
         movieImageView.autoSetDimension(.height, toSize: 327.0)
         movieImageView.autoPinEdgesToSuperviewEdges()
@@ -247,9 +246,9 @@ class MovieDetailsViewController: UIViewController {
         summaryLabel.autoPinEdge(toSuperviewEdge: .leading, withInset: 16)
         summaryLabel.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16)
         
-        crewStackView.autoPinEdge(.top, to: .bottom, of: summaryLabel, withOffset: 5)
-        crewStackView.autoPinEdge(toSuperviewEdge: .leading, withInset: 20)
-        crewStackView.autoPinEdge(toSuperviewEdge: .trailing, withInset: 20)
+        crewStackView.autoPinEdge(.top, to: .bottom, of: summaryLabel, withOffset: 0)
+        crewStackView.autoPinEdge(.leading, to: .leading, of: summaryAndCastView, withOffset: 20)
+        crewStackView.autoPinEdge(.trailing, to: .trailing, of: summaryAndCastView, withOffset: 20)
     }
     
     private func getCategoriesAndRuntime(for details: MovieDetailsModel) -> NSMutableAttributedString {
@@ -333,6 +332,7 @@ class MovieDetailsViewController: UIViewController {
             horizontalStackView.addArrangedSubview(filler)
             ctr += 1
         }
+        horizontalStackView.alignment = .fill
         crewStackView.addArrangedSubview(horizontalStackView)
     }
 }

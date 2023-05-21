@@ -22,6 +22,7 @@ class RecommendedMoviesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tabBarController?.title = "Movie List"
         buildViews()
     }
     
@@ -74,7 +75,6 @@ extension RecommendedMoviesViewController: UICollectionViewDelegate {
         
         return cell
     }
-    
 }
 
 extension RecommendedMoviesViewController: UICollectionViewDelegateFlowLayout {
