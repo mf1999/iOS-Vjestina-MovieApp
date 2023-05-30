@@ -1,10 +1,9 @@
 import UIKit
 import PureLayout
 import Kingfisher
-import MovieAppData
 
 class MovieDetailsViewController: UIViewController {
-    private var movieDetails: MovieDetailsModel!
+    private var movieDetails: MovieDetailsStruct!
     private var quickDetailsView: UIView! // Top one with the background image
     private var summaryAndCastView: UIView! // Bottom one with the cast and crew
     
@@ -30,7 +29,7 @@ class MovieDetailsViewController: UIViewController {
     
     private var crewStackView: UIStackView!
     
-    init(movieDetails: MovieDetailsModel){
+    init(movieDetails: MovieDetailsStruct){
         super.init(nibName: nil, bundle: nil)
         self.movieDetails = movieDetails
     }
@@ -62,7 +61,7 @@ class MovieDetailsViewController: UIViewController {
         createSummaryAndCastView(for: movieDetails!)
     }
     
-    private func createQuickDetailsView(for movieDetails: MovieDetailsModel){
+    private func createQuickDetailsView(for movieDetails: MovieDetailsStruct){
         quickDetailsView = UIView()
         contentView.addSubview(quickDetailsView)
 
@@ -94,7 +93,7 @@ class MovieDetailsViewController: UIViewController {
         quickDetailsView.addSubview(userScoreLabelText)
     }
     
-    private func createSummaryAndCastView(for movieDetails: MovieDetailsModel){
+    private func createSummaryAndCastView(for movieDetails: MovieDetailsStruct){
         summaryAndCastView = UIView()
         contentView.addSubview(summaryAndCastView)
 
@@ -116,7 +115,7 @@ class MovieDetailsViewController: UIViewController {
     }
     
     private func styleQuickDetailsView(){
-        movieImageView.kf.setImage(with: URL(string: movieDetails.imageUrl))
+        movieImageView.kf.setImage(with: movieDetails.imageUrl)
         movieImageView.contentMode = .scaleAspectFill
         
         favouriteButton.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
@@ -251,7 +250,7 @@ class MovieDetailsViewController: UIViewController {
         crewStackView.autoPinEdge(.trailing, to: .trailing, of: summaryAndCastView, withOffset: 20)
     }
     
-    private func getCategoriesAndRuntime(for details: MovieDetailsModel) -> NSMutableAttributedString {
+    private func getCategoriesAndRuntime(for details: MovieDetailsStruct) -> NSMutableAttributedString {
         var categoriesText: String = ""
         for c in details.categories{
             categoriesText += String(describing:  c.self).capitalized + ", "
@@ -270,7 +269,7 @@ class MovieDetailsViewController: UIViewController {
         return normalString
     }
     
-    private func getNameAndYear(for details: MovieDetailsModel) -> NSMutableAttributedString {
+    private func getNameAndYear(for details: MovieDetailsStruct) -> NSMutableAttributedString {
         let name = details.name
         let year = " (" + String(details.year) + ")"
         
@@ -284,12 +283,12 @@ class MovieDetailsViewController: UIViewController {
         return attributedString
     }
     
-    private func fillStackView(with crewMembers: [MovieCrewMemberModel]){
+    private func fillStackView(with crewMembers:[Dictionary<String, String>]){
         func getHorStack() -> UIStackView{
             let horizontalStackView = UIStackView()
             horizontalStackView.axis = .horizontal
             horizontalStackView.alignment = .fill
-            horizontalStackView.distribution = .fillEqually//.fillProportionally // names look better than .fillEqualy
+            horizontalStackView.distribution = .fillEqually
             horizontalStackView.spacing = 16
             
             return horizontalStackView
@@ -297,13 +296,13 @@ class MovieDetailsViewController: UIViewController {
         
         var ctr = 0
         var horizontalStackView: UIStackView = getHorStack()
-        for c in crewMembers{
+        for crewMember in crewMembers{
+            let role = crewMember["role"]
+            let name = crewMember["name"]
             if ctr % 3 == 0 {
                 crewStackView.addArrangedSubview(horizontalStackView)
                 horizontalStackView = getHorStack()
             }
-            let name = c.name
-            let role = c.role
             
             let memberView = UIView()
             let nameLabel = UILabel()

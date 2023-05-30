@@ -4,7 +4,7 @@ import MovieAppData
 class CategoryCell: UICollectionViewCell {
     var router: RouterProtocol!
     
-    var movies: [MovieModel]!
+    var movies: [SingleMovieStruct]!
     var categoryLabel: UILabel!
         
     var postersCollectionView: UICollectionView!
@@ -21,7 +21,7 @@ class CategoryCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func configure(with movies: [MovieModel], from categoryName: String, using router: RouterProtocol){
+    public func configure(with movies: [SingleMovieStruct], from categoryName: String, using router: RouterProtocol){
         self.movies = movies
         categoryLabel.text = categoryName
         self.router = router
@@ -80,13 +80,22 @@ extension CategoryCell: UICollectionViewDelegate {
             fatalError("FAILED DEQUEING POSTER CELL")
         }
         
-        cell.configure(with: URL(string: self.movies[indexPath[1]].imageUrl)!)
+        cell.configure(with: self.movies[indexPath[1]].imageUrl)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movieID = movies[indexPath[1]].id
-        router.showMovieDetails(movieDetails: MovieUseCase().getDetails(id: movieID)!)
+        let urlString = "https://five-ios-api.herokuapp.com/api/v1/movie/\(movieID)/details"
+        let url = URL(string: urlString)!
+        let request = NSMutableURLRequest(url: url)
+        request.setValue("Bearer Zpu7bOQYLNiCkT32V3c9BPoxDMfxisPAfevLW6ps", forHTTPHeaderField: "Authorization")
+        Task{
+            let (data, response) = try! await URLSession.shared.data(for: request as URLRequest)
+            let result = try! JSONDecoder().decode(MovieDetailsStruct.self, from: data)
+            router.showMovieDetails(movieDetails: result)
+        }
+        
     }
 }
 

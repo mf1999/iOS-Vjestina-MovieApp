@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         let navigationController = UINavigationController()
         let router = Router(navigationController: navigationController)
-        router.setStartScreen(in: window, for: 0)
+        router.setStartScreen(in: window)
         
     }
     
