@@ -1,7 +1,6 @@
 import UIKit
 import PureLayout
 import Kingfisher
-import MovieAppData
 import Combine
 
 class RecommendedMoviesViewController: UIViewController {
