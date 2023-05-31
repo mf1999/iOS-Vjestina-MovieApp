@@ -1,9 +1,13 @@
 import UIKit
 import PureLayout
 import Kingfisher
+import Combine
 
 class MovieDetailsViewController: UIViewController {
-    private var movieDetails: MovieDetailsStruct!
+    private var viewModel = MovieDetailsVM()
+    private var movieID: Int!
+    private var cancellable: AnyCancellable?
+    
     private var quickDetailsView: UIView! // Top one with the background image
     private var summaryAndCastView: UIView! // Bottom one with the cast and crew
     
@@ -29,9 +33,9 @@ class MovieDetailsViewController: UIViewController {
     
     private var crewStackView: UIStackView!
     
-    init(movieDetails: MovieDetailsStruct){
+    init(id: Int){
         super.init(nibName: nil, bundle: nil)
-        self.movieDetails = movieDetails
+        movieID = id
     }
     
     required init?(coder: NSCoder) {
@@ -40,7 +44,14 @@ class MovieDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        buildViews()
+        Task{
+            await viewModel.loadDetails(movieID: movieID)
+        }
+        cancellable = viewModel.objectWillChange.sink(receiveValue: { [weak self] in
+            DispatchQueue.main.async {
+                self?.buildViews()
+            }
+        })
     }
     
     private func buildViews(){
@@ -57,8 +68,8 @@ class MovieDetailsViewController: UIViewController {
         contentView = UIView()
         scrollView.addSubview(contentView)
         
-        createQuickDetailsView(for: movieDetails!)
-        createSummaryAndCastView(for: movieDetails!)
+        createQuickDetailsView(for: viewModel.movieDetails)
+        createSummaryAndCastView(for: viewModel.movieDetails)
     }
     
     private func createQuickDetailsView(for movieDetails: MovieDetailsStruct){
@@ -115,7 +126,7 @@ class MovieDetailsViewController: UIViewController {
     }
     
     private func styleQuickDetailsView(){
-        movieImageView.kf.setImage(with: movieDetails.imageUrl)
+        movieImageView.kf.setImage(with: viewModel.movieDetails.imageUrl)
         movieImageView.contentMode = .scaleAspectFill
         
         favouriteButton.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
@@ -127,28 +138,28 @@ class MovieDetailsViewController: UIViewController {
         favouriteSymbol.autoSetDimension(.width, toSize: 14)
         favouriteSymbol.autoSetDimension(.height, toSize: 13)
         
-        movieGenresAndRuntime.attributedText = getCategoriesAndRuntime(for: movieDetails)
+        movieGenresAndRuntime.attributedText = getCategoriesAndRuntime(for: viewModel.movieDetails)
         movieGenresAndRuntime.textColor = .white
         movieGenresAndRuntime.textAlignment = .left
         movieGenresAndRuntime.backgroundColor = .blackSemiVisibleColor
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        let date = dateFormatter.date(from: movieDetails.releaseDate)
+        let date = dateFormatter.date(from: viewModel.movieDetails.releaseDate)
         dateFormatter.dateFormat = "MM/dd/yyy"
         releaseDateAndCountry.text = dateFormatter.string(from: date!) + " (US)"
         releaseDateAndCountry.textColor = .white
         releaseDateAndCountry.textAlignment = .left
         releaseDateAndCountry.backgroundColor = .blackSemiVisibleColor
         
-        nameAndYear.attributedText = self.getNameAndYear(for: movieDetails)
+        nameAndYear.attributedText = self.getNameAndYear(for: viewModel.movieDetails)
         nameAndYear.textColor = .white
         nameAndYear.textAlignment = .left
         nameAndYear.lineBreakMode = .byWordWrapping
         nameAndYear.numberOfLines = 0
         nameAndYear.backgroundColor = .blackSemiVisibleColor
         
-        userScoreLabelNumber.text = String(movieDetails.rating)
+        userScoreLabelNumber.text = String(viewModel.movieDetails.rating)
         userScoreLabelNumber.font = .systemFont(ofSize: 16, weight: .bold)
         userScoreLabelNumber.textColor = .white
         userScoreLabelNumber.backgroundColor = .blackSemiVisibleColor
@@ -166,14 +177,14 @@ class MovieDetailsViewController: UIViewController {
         overviewLabel.textColor = UIColor.darkBlue
         overviewLabel.font = .systemFont(ofSize: 20, weight: .bold)
 
-        summaryLabel.text = movieDetails.summary
+        summaryLabel.text = viewModel.movieDetails.summary
         summaryLabel.textColor = .black
         summaryLabel.textAlignment = .left
         summaryLabel.font = .systemFont(ofSize: 14, weight: .regular)
         summaryLabel.lineBreakMode = .byWordWrapping
         summaryLabel.numberOfLines = 0
         
-        fillStackView(with: movieDetails.crewMembers)
+        fillStackView(with: viewModel.movieDetails.crewMembers)
         crewStackView.axis = .vertical
         crewStackView.alignment = .fill
         crewStackView.distribution = .fill

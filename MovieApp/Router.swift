@@ -37,8 +37,8 @@ class Router: RouterProtocol{
         window?.makeKeyAndVisible()
     }
     
-    func showMovieDetails(movieDetails: MovieDetailsStruct){
-        movieDetailsVC = MovieDetailsViewController(movieDetails: movieDetails)
+    func showMovieDetails(id: Int){
+        movieDetailsVC = MovieDetailsViewController(id: id)
         movieDetailsVC.title = "Movie details"
         navigationController.pushViewController(movieDetailsVC, animated: true)
     }

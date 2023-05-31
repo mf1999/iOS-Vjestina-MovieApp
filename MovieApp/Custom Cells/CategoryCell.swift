@@ -79,23 +79,13 @@ extension CategoryCell: UICollectionViewDelegate {
         guard let cell = self.postersCollectionView.dequeueReusableCell(withReuseIdentifier: self.identifier, for: indexPath) as? MoviePosterCell else {
             fatalError("FAILED DEQUEING POSTER CELL")
         }
-        
         cell.configure(with: self.movies[indexPath[1]].imageUrl)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movieID = movies[indexPath[1]].id
-        let urlString = "https://five-ios-api.herokuapp.com/api/v1/movie/\(movieID)/details"
-        let url = URL(string: urlString)!
-        let request = NSMutableURLRequest(url: url)
-        request.setValue("Bearer Zpu7bOQYLNiCkT32V3c9BPoxDMfxisPAfevLW6ps", forHTTPHeaderField: "Authorization")
-        Task{
-            let (data, response) = try! await URLSession.shared.data(for: request as URLRequest)
-            let result = try! JSONDecoder().decode(MovieDetailsStruct.self, from: data)
-            router.showMovieDetails(movieDetails: result)
-        }
-        
+        router.showMovieDetails(id: movieID)
     }
 }
 
