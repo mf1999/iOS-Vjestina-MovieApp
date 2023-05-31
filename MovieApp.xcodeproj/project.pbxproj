@@ -18,7 +18,6 @@
 		6E7B6D3229D2ED5A007DD0CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E7B6D3129D2ED5A007DD0CB /* Assets.xcassets */; };
 		6E7B6D3529D2ED5A007DD0CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E7B6D3329D2ED5A007DD0CB /* LaunchScreen.storyboard */; };
 		6E7B6D3E29D2EE26007DD0CB /* PureLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 6E7B6D3D29D2EE26007DD0CB /* PureLayout */; };
-		6E7B6D4129D2EE84007DD0CB /* MovieAppData in Frameworks */ = {isa = PBXBuildFile; productRef = 6E7B6D4029D2EE84007DD0CB /* MovieAppData */; };
 		6E7DB4A82A24D37100948B0C /* RecommenedMoviesVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7DB4A72A24D37100948B0C /* RecommenedMoviesVM.swift */; };
 		6E955B592A02FE6D005EC912 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E955B582A02FE6D005EC912 /* FavoritesViewController.swift */; };
 		6E955B5B2A030069005EC912 /* RouterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E955B5A2A030069005EC912 /* RouterProtocol.swift */; };
@@ -58,7 +57,6 @@
 			files = (
 				6E15AF9329D59BC80053C944 /* Kingfisher in Frameworks */,
 				6E7B6D3E29D2EE26007DD0CB /* PureLayout in Frameworks */,
-				6E7B6D4129D2EE84007DD0CB /* MovieAppData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,7 +154,6 @@
 			name = MovieApp;
 			packageProductDependencies = (
 				6E7B6D3D29D2EE26007DD0CB /* PureLayout */,
-				6E7B6D4029D2EE84007DD0CB /* MovieAppData */,
 				6E15AF9229D59BC80053C944 /* Kingfisher */,
 			);
 			productName = MovieApp;
@@ -189,7 +186,6 @@
 			mainGroup = 6E7B6D1C29D2ED58007DD0CB;
 			packageReferences = (
 				6E7B6D3C29D2EE26007DD0CB /* XCRemoteSwiftPackageReference "PureLayout" */,
-				6E7B6D3F29D2EE84007DD0CB /* XCRemoteSwiftPackageReference "MovieAppData" */,
 				6E15AF9129D59BC80053C944 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 6E7B6D2629D2ED58007DD0CB /* Products */;
@@ -458,14 +454,6 @@
 				minimumVersion = 3.0.0;
 			};
 		};
-		6E7B6D3F29D2EE84007DD0CB /* XCRemoteSwiftPackageReference "MovieAppData" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/fiveagency/MovieAppData";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -478,11 +466,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6E7B6D3C29D2EE26007DD0CB /* XCRemoteSwiftPackageReference "PureLayout" */;
 			productName = PureLayout;
-		};
-		6E7B6D4029D2EE84007DD0CB /* MovieAppData */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E7B6D3F29D2EE84007DD0CB /* XCRemoteSwiftPackageReference "MovieAppData" */;
-			productName = MovieAppData;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
