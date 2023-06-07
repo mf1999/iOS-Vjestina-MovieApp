@@ -1,10 +1,13 @@
 import UIKit
 import PureLayout
 import Kingfisher
-import MovieAppData
+import Combine
 
 class MovieDetailsViewController: UIViewController {
-    private var movieDetails: MovieDetailsModel!
+    private var viewModel = MovieDetailsVM()
+    private var movieID: Int!
+    private var cancellable: AnyCancellable?
+    
     private var quickDetailsView: UIView! // Top one with the background image
     private var summaryAndCastView: UIView! // Bottom one with the cast and crew
     
@@ -30,9 +33,9 @@ class MovieDetailsViewController: UIViewController {
     
     private var crewStackView: UIStackView!
     
-    init(movieDetails: MovieDetailsModel){
+    init(id: Int){
         super.init(nibName: nil, bundle: nil)
-        self.movieDetails = movieDetails
+        movieID = id
     }
     
     required init?(coder: NSCoder) {
@@ -41,7 +44,14 @@ class MovieDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        buildViews()
+        Task{
+            await viewModel.loadDetails(movieID: movieID)
+        }
+        cancellable = viewModel.objectWillChange.sink(receiveValue: { [weak self] in
+            DispatchQueue.main.async {
+                self?.buildViews()
+            }
+        })
     }
     
     private func buildViews(){
@@ -58,11 +68,11 @@ class MovieDetailsViewController: UIViewController {
         contentView = UIView()
         scrollView.addSubview(contentView)
         
-        createQuickDetailsView(for: movieDetails!)
-        createSummaryAndCastView(for: movieDetails!)
+        createQuickDetailsView(for: viewModel.movieDetails)
+        createSummaryAndCastView(for: viewModel.movieDetails)
     }
     
-    private func createQuickDetailsView(for movieDetails: MovieDetailsModel){
+    private func createQuickDetailsView(for movieDetails: MovieDetailsStruct){
         quickDetailsView = UIView()
         contentView.addSubview(quickDetailsView)
 
@@ -94,7 +104,7 @@ class MovieDetailsViewController: UIViewController {
         quickDetailsView.addSubview(userScoreLabelText)
     }
     
-    private func createSummaryAndCastView(for movieDetails: MovieDetailsModel){
+    private func createSummaryAndCastView(for movieDetails: MovieDetailsStruct){
         summaryAndCastView = UIView()
         contentView.addSubview(summaryAndCastView)
 
@@ -116,7 +126,7 @@ class MovieDetailsViewController: UIViewController {
     }
     
     private func styleQuickDetailsView(){
-        movieImageView.kf.setImage(with: URL(string: movieDetails.imageUrl))
+        movieImageView.kf.setImage(with: viewModel.movieDetails.imageUrl)
         movieImageView.contentMode = .scaleAspectFill
         
         favouriteButton.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
@@ -128,28 +138,28 @@ class MovieDetailsViewController: UIViewController {
         favouriteSymbol.autoSetDimension(.width, toSize: 14)
         favouriteSymbol.autoSetDimension(.height, toSize: 13)
         
-        movieGenresAndRuntime.attributedText = getCategoriesAndRuntime(for: movieDetails)
+        movieGenresAndRuntime.attributedText = getCategoriesAndRuntime(for: viewModel.movieDetails)
         movieGenresAndRuntime.textColor = .white
         movieGenresAndRuntime.textAlignment = .left
         movieGenresAndRuntime.backgroundColor = .blackSemiVisibleColor
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        let date = dateFormatter.date(from: movieDetails.releaseDate)
+        let date = dateFormatter.date(from: viewModel.movieDetails.releaseDate)
         dateFormatter.dateFormat = "MM/dd/yyy"
         releaseDateAndCountry.text = dateFormatter.string(from: date!) + " (US)"
         releaseDateAndCountry.textColor = .white
         releaseDateAndCountry.textAlignment = .left
         releaseDateAndCountry.backgroundColor = .blackSemiVisibleColor
         
-        nameAndYear.attributedText = self.getNameAndYear(for: movieDetails)
+        nameAndYear.attributedText = self.getNameAndYear(for: viewModel.movieDetails)
         nameAndYear.textColor = .white
         nameAndYear.textAlignment = .left
         nameAndYear.lineBreakMode = .byWordWrapping
         nameAndYear.numberOfLines = 0
         nameAndYear.backgroundColor = .blackSemiVisibleColor
         
-        userScoreLabelNumber.text = String(movieDetails.rating)
+        userScoreLabelNumber.text = String(viewModel.movieDetails.rating)
         userScoreLabelNumber.font = .systemFont(ofSize: 16, weight: .bold)
         userScoreLabelNumber.textColor = .white
         userScoreLabelNumber.backgroundColor = .blackSemiVisibleColor
@@ -167,14 +177,14 @@ class MovieDetailsViewController: UIViewController {
         overviewLabel.textColor = UIColor.darkBlue
         overviewLabel.font = .systemFont(ofSize: 20, weight: .bold)
 
-        summaryLabel.text = movieDetails.summary
+        summaryLabel.text = viewModel.movieDetails.summary
         summaryLabel.textColor = .black
         summaryLabel.textAlignment = .left
         summaryLabel.font = .systemFont(ofSize: 14, weight: .regular)
         summaryLabel.lineBreakMode = .byWordWrapping
         summaryLabel.numberOfLines = 0
         
-        fillStackView(with: movieDetails.crewMembers)
+        fillStackView(with: viewModel.movieDetails.crewMembers)
         crewStackView.axis = .vertical
         crewStackView.alignment = .fill
         crewStackView.distribution = .fill
@@ -251,7 +261,7 @@ class MovieDetailsViewController: UIViewController {
         crewStackView.autoPinEdge(.trailing, to: .trailing, of: summaryAndCastView, withOffset: 20)
     }
     
-    private func getCategoriesAndRuntime(for details: MovieDetailsModel) -> NSMutableAttributedString {
+    private func getCategoriesAndRuntime(for details: MovieDetailsStruct) -> NSMutableAttributedString {
         var categoriesText: String = ""
         for c in details.categories{
             categoriesText += String(describing:  c.self).capitalized + ", "
@@ -270,7 +280,7 @@ class MovieDetailsViewController: UIViewController {
         return normalString
     }
     
-    private func getNameAndYear(for details: MovieDetailsModel) -> NSMutableAttributedString {
+    private func getNameAndYear(for details: MovieDetailsStruct) -> NSMutableAttributedString {
         let name = details.name
         let year = " (" + String(details.year) + ")"
         
@@ -284,12 +294,12 @@ class MovieDetailsViewController: UIViewController {
         return attributedString
     }
     
-    private func fillStackView(with crewMembers: [MovieCrewMemberModel]){
+    private func fillStackView(with crewMembers:[Dictionary<String, String>]){
         func getHorStack() -> UIStackView{
             let horizontalStackView = UIStackView()
             horizontalStackView.axis = .horizontal
             horizontalStackView.alignment = .fill
-            horizontalStackView.distribution = .fillEqually//.fillProportionally // names look better than .fillEqualy
+            horizontalStackView.distribution = .fillEqually
             horizontalStackView.spacing = 16
             
             return horizontalStackView
@@ -297,13 +307,13 @@ class MovieDetailsViewController: UIViewController {
         
         var ctr = 0
         var horizontalStackView: UIStackView = getHorStack()
-        for c in crewMembers{
+        for crewMember in crewMembers{
+            let role = crewMember["role"]
+            let name = crewMember["name"]
             if ctr % 3 == 0 {
                 crewStackView.addArrangedSubview(horizontalStackView)
                 horizontalStackView = getHorStack()
             }
-            let name = c.name
-            let role = c.role
             
             let memberView = UIView()
             let nameLabel = UILabel()

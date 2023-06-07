@@ -1,7 +1,7 @@
 import UIKit
 import PureLayout
 import Kingfisher
-import MovieAppData
+import Combine
 
 class RecommendedMoviesViewController: UIViewController {
     private var router: RouterProtocol!
@@ -10,6 +10,9 @@ class RecommendedMoviesViewController: UIViewController {
     private let layout = UICollectionViewFlowLayout()
     
     private let identifier = "HorizontalCell"
+    
+    private let viewModel = RecommendedMoviesVM()
+    private var cancellable: AnyCancellable!
     
     init(router: RouterProtocol){
         super.init(nibName: nil, bundle: nil)
@@ -22,7 +25,16 @@ class RecommendedMoviesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBarController?.title = "Movie List"
+        Task{
+            await viewModel.loadPopular()
+            await viewModel.loadTrending()
+            await viewModel.loadFreeToWatch()
+        }
+        cancellable = viewModel.objectWillChange.sink(receiveValue: { [weak self] in
+            DispatchQueue.main.async {
+                self?.categoriesCollectionView.reloadData()
+            }
+        })
         buildViews()
     }
     
@@ -39,6 +51,7 @@ class RecommendedMoviesViewController: UIViewController {
     
     private func styleViews(){
         view.backgroundColor = .white
+        tabBarController?.title = "Movie List"
         
         categoriesCollectionView.backgroundColor = .white
         categoriesCollectionView.dataSource = self
@@ -66,13 +79,13 @@ extension RecommendedMoviesViewController: UICollectionViewDelegate {
         }
         
         if indexPath[1] == 0 {
-            cell.configure(with: MovieUseCase().popularMovies, from: "What's popular", using: router)
+            cell.configure(with: viewModel.popularMovies, from: "What's popular", using: router)
         } else if indexPath[1] == 1 {
-            cell.configure(with: MovieUseCase().freeToWatchMovies, from: "Free to Watch", using: router)
-        } else {
-            cell.configure(with: MovieUseCase().trendingMovies, from: "Trending", using: router)
+            cell.configure(with: viewModel.ftwMovies, from: "Free to Watch", using: router)
+        } else if indexPath[1] == 2{
+            cell.configure(with: viewModel.trendingMovies, from: "Trending", using: router)
         }
-        
+        cell.postersCollectionView.reloadData()
         return cell
     }
 }

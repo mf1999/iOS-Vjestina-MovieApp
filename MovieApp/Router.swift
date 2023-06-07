@@ -1,14 +1,11 @@
 import UIKit
-import MovieAppData
 
 class Router: RouterProtocol{
     private var navigationController: UINavigationController!
     
     private var recommendedVC: RecommendedMoviesViewController!
     private var favouritesVC: FavouritesViewController!
-    
-    private var movieListVC: MovieListViewController!
-    
+        
     private var movieDetailsVC: MovieDetailsViewController!
     
     init(navigationController: UINavigationController) {
@@ -24,31 +21,24 @@ class Router: RouterProtocol{
         navigationController.navigationBar.scrollEdgeAppearance = navigationController.navigationBar.standardAppearance
     }
         
-    func setStartScreen(in window: UIWindow?, for config: Int) {
-        if config == 0 {
-            let tabBarController = UITabBarController()
-            
-            recommendedVC = RecommendedMoviesViewController(router: self)
-            recommendedVC.tabBarItem = UITabBarItem(title: "Movie list", image: UIImage(named: "HomeVector"), selectedImage: UIImage(named: "HomeFilledVector"))
-            
-            favouritesVC = FavouritesViewController()
-            favouritesVC.tabBarItem = UITabBarItem(title: "Favourites", image: UIImage(named: "HeartVector"), selectedImage: UIImage(named: "HeartFilledVector"))
-
-            tabBarController.viewControllers = [recommendedVC, favouritesVC]
-            navigationController.viewControllers = [tabBarController]
-        }
+    func setStartScreen(in window: UIWindow?) {
+        let tabBarController = UITabBarController()
         
-        if config == 1 {
-            movieListVC = MovieListViewController(router: self)
-            navigationController.viewControllers = [movieListVC]
-        }
+        recommendedVC = RecommendedMoviesViewController(router: self)
+        recommendedVC.tabBarItem = UITabBarItem(title: "Movie list", image: UIImage(named: "HomeVector"), selectedImage: UIImage(named: "HomeFilledVector"))
+        
+        favouritesVC = FavouritesViewController()
+        favouritesVC.tabBarItem = UITabBarItem(title: "Favourites", image: UIImage(named: "HeartVector"), selectedImage: UIImage(named: "HeartFilledVector"))
+        
+        tabBarController.viewControllers = [recommendedVC, favouritesVC]
+        navigationController.viewControllers = [tabBarController]
+        
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
     
-    func showMovieDetails(movieDetails: MovieDetailsModel){
-        print("in showMovieDetails")
-        movieDetailsVC = MovieDetailsViewController(movieDetails: movieDetails)
+    func showMovieDetails(id: Int){
+        movieDetailsVC = MovieDetailsViewController(id: id)
         movieDetailsVC.title = "Movie details"
         navigationController.pushViewController(movieDetailsVC, animated: true)
     }

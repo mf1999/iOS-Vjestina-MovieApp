@@ -4,7 +4,7 @@ import MovieAppData
 class CategoryCell: UICollectionViewCell {
     var router: RouterProtocol!
     
-    var movies: [MovieModel]!
+    var movies: [SingleMovieStruct]!
     var categoryLabel: UILabel!
         
     var postersCollectionView: UICollectionView!
@@ -21,7 +21,7 @@ class CategoryCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func configure(with movies: [MovieModel], from categoryName: String, using router: RouterProtocol){
+    public func configure(with movies: [SingleMovieStruct], from categoryName: String, using router: RouterProtocol){
         self.movies = movies
         categoryLabel.text = categoryName
         self.router = router
@@ -79,14 +79,13 @@ extension CategoryCell: UICollectionViewDelegate {
         guard let cell = self.postersCollectionView.dequeueReusableCell(withReuseIdentifier: self.identifier, for: indexPath) as? MoviePosterCell else {
             fatalError("FAILED DEQUEING POSTER CELL")
         }
-        
-        cell.configure(with: URL(string: self.movies[indexPath[1]].imageUrl)!)
+        cell.configure(with: self.movies[indexPath[1]].imageUrl)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movieID = movies[indexPath[1]].id
-        router.showMovieDetails(movieDetails: MovieUseCase().getDetails(id: movieID)!)
+        router.showMovieDetails(id: movieID)
     }
 }
 
